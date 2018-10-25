@@ -13,7 +13,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace ASP.NetCore.Api.Controllers
 {
-    [Route("api/User")]
+    [Authorize]
+    [Route("api")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -28,7 +29,7 @@ namespace ASP.NetCore.Api.Controllers
         }
 
 
-
+        [AllowAnonymous]
         [HttpPost("Login")]
         public IActionResult Login([FromBody] User user)
         {
@@ -38,7 +39,7 @@ namespace ASP.NetCore.Api.Controllers
                 User result = _userService.Login(user);
                 if (result == null)
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized);
+                    return BadRequest(new { message = "Username or password is incorrect" });
                 }
                 return Ok(new TokenDTO { token = JWTHelper.BuildToken(result, _config) });
             }
@@ -50,7 +51,6 @@ namespace ASP.NetCore.Api.Controllers
         }
 
         [HttpGet("Login")]
-        [Authorize]
         public IActionResult Login()
         {
             try
