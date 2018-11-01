@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ASP.NetCore.Api.Helpers;
+﻿using ASP.NetCore.Api.Helpers;
 using ASP.NetCore.Models.DTOS;
 using ASP.NetCore.Models.Models;
 using ASP.NetCore.Services.Interfaces;
@@ -10,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace ASP.NetCore.Api.Controllers
 {
@@ -56,6 +53,45 @@ namespace ASP.NetCore.Api.Controllers
             try
             {
                 return Ok(_userService.Users());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+
+        }
+        [HttpPost("AddUser")]
+        public IActionResult AddUser([FromBody] User user)
+        {
+            try
+            {
+
+                string result = _userService.AddUsers(user);
+                if (result == null)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+                }
+                return Ok(new { message = result });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+
+        }
+
+        [HttpDelete("DeleteUser")]
+        public IActionResult DeleteUser(long Id)
+        {
+            try
+            {
+
+                string result = _userService.DeleteUser(Id);
+                if (result == null)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+                }
+                return Ok(new { message = result });
             }
             catch (Exception e)
             {

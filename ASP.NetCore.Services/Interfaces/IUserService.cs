@@ -1,7 +1,5 @@
 ﻿using ASP.NetCore.Models.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ASP.NetCore.Services.Interfaces
 {
@@ -10,5 +8,11 @@ namespace ASP.NetCore.Services.Interfaces
         User Login(User user);
 
         IEnumerable<User> Users();
+
+        string AddUsers(User user);
+
+        bool CheckUser(User user);
+
+        string DeleteUser(long id);
     }
 }

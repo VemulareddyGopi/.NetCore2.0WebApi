@@ -47,9 +47,48 @@ namespace ASP.NetCore.Services.Implementations
             {
                 return null;
             }
+        }
+        public string AddUsers(User user)
+        {
+            try
+            {
+                if (user.Id > 0)
+                {
+                    _unitOfWork.UserRepository.Update(user);
 
+                    return "User Updated Successfully !";
+                }
+                else
+                {
+                    _unitOfWork.UserRepository.Insert(user);
 
+                    return "User Insert Successfully !";
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
 
+        public string DeleteUser(long id)
+        {
+
+            _unitOfWork.UserRepository.Delete(id);
+
+            return "User Deleted Successfully !";
+        }
+
+        public bool CheckUser(User user)
+        {
+            if (user.Id > 0)
+            {
+                return _unitOfWork.UserRepository.GetManyQueryable(x => x.Id == user.Id && x.Email == user.Email).Any();
+            }
+            else
+            {
+                return _unitOfWork.UserRepository.GetManyQueryable(x => x.Email == user.Email).Any();
+            }
         }
     }
 }
